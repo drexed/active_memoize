@@ -1,6 +1,5 @@
-require "active_memoize/version"
+# frozen_string_literal: true
 
-module ActiveMemoize
-  class Error < StandardError; end
-  # Your code goes here...
+%w[version cache].each do |file_name|
+  require "active_memoize/#{file_name}"
 end
