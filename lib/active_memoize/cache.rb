@@ -53,9 +53,9 @@ module ActiveMemoize
       @cache.merge!(hash)
     end
 
-    def memoize(&block)
+    def memoize(method_name = nil, &block)
       method_locals = caller_locals(block)
-      method_name = caller_method
+      method_name ||= caller_method
       method_name = "#{caller_method}:#{method_locals}" unless method_locals.nil?
 
       return @cache[method_name] if @cache.key?(method_name)

@@ -9,6 +9,12 @@ class FooService
     @cache ||= ActiveMemoize::Cache.new
   end
 
+  def custom
+    cache.memoize('custom_name') do
+      SecureRandom.hex(10)
+    end
+  end
+
   def fixed
     cache.memoize do
       SecureRandom.hex(10)
@@ -109,6 +115,12 @@ RSpec.describe ActiveMemoize::Cache do
       new_random_string = service.random
 
       expect(old_random_string).to eq(new_random_string)
+    end
+
+    it 'returns hash key with custom name' do
+      service.custom
+
+      expect(service.cache.keys.first).to eq('custom_name')
     end
 
     it 'returns hash key without params' do

@@ -35,6 +35,12 @@ class Movies
     @cache ||= ActiveMemoize::Cache.new
   end
 
+  def all
+    cache.memoize('custom_cache_key') do
+      HTTP.get("http://movies.com/all")
+    end
+  end
+
   def random
     cache['random'] ||= HTTP.get('http://movies.com/any')
   end
