@@ -54,7 +54,7 @@ module ActiveMemoize
     end
 
     def memoize(&block)
-      method_name = "#{caller_method}:#{caller_locals(block)}"
+      method_name = [caller_method, caller_locals(block)].compact.join(':')
       return @cache[method_name] if @cache.key?(method_name)
 
       @cache[method_name] = yield(block)
