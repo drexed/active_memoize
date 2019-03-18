@@ -87,6 +87,8 @@ module ActiveMemoize
     def caller_locals(block)
       local_vars = block.binding.local_variables
       local_vars = local_vars.flat_map { |name| [name, block.binding.local_variable_get(name)].join('=') }
+      return if local_vars.empty?
+
       local_vars.join(',')
     end
     # rubocop:enable Metrics/LineLength
