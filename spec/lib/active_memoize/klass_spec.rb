@@ -6,7 +6,7 @@ require 'securerandom'
 class FooService
   extend ActiveMemoize::Klass
 
-  def custom
+  def self.custom
     SecureRandom.hex(10)
   end
 
@@ -23,19 +23,19 @@ end
 RSpec.describe ActiveMemoize::Klass do
   subject { FooService.new }
 
-  let(:service) { subject }
+  let(:service) { FooService }
 
   describe '.memoize' do
     it 'returns same string twice' do
-      old_random_string = service.random
-      new_random_string = service.random
+      old_random_string = subject.random
+      new_random_string = subject.random
 
       expect(old_random_string).to eq(new_random_string)
     end
 
     it 'returns hash key with custom name' do
-      old_custom_string = service.random(12)
-      new_custom_string = service.random(12)
+      old_custom_string = service.custom
+      new_custom_string = service.custom
 
       expect(old_custom_string).to eq(new_custom_string)
     end
