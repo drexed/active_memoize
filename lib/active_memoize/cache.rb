@@ -55,8 +55,9 @@ module ActiveMemoize
 
     def memoize(method_name = nil, &block)
       method_locals = caller_locals(block)
-      method_name ||= caller_method
-      method_name = "#{caller_method}:#{method_locals}" unless method_locals.nil?
+      method_name ||= begin
+        method_locals.nil? ? caller_method : "#{caller_method}:#{method_locals}"
+      end
 
       return @cache[method_name] if @cache.key?(method_name)
 
