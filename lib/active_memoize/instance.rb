@@ -1,67 +1,60 @@
 # frozen_string_literal: true
 
 module ActiveMemoize
-  class Cache
+  class Instance
+    include ActiveMemoize::Shared
 
     CALLER_METHOD_REGEX ||= /`([^']*)'/.freeze
 
-    attr_reader :cache
-
-    def initialize
-      @cache = {}
-    end
+    def initialize; end
 
     def [](key)
-      @cache[key]
+      cache[key]
     end
 
     def []=(key, val)
-      @cache[key] = val
+      cache[key] = val
     end
 
     def clear
-      @cache.clear
+      cache.clear
     end
 
     def delete(key)
-      @cache.delete(key)
+      cache.delete(key)
     end
 
     # :nocov:
     def each
-      @cache.each { |key, val| yield(key, val) }
+      cache.each { |key, val| yield(key, val) }
     end
     # :nocov:
 
     def empty?
-      @cache.empty?
+      cache.empty?
     end
 
     alias_method :blank?, :empty?
 
     def key?(key)
-      @cache.key?(key)
+      cache.key?(key)
     end
 
     alias_method :hit?, :key?
 
     def keys
-      @cache.keys
+      cache.keys
     end
 
     def merge!(hash)
-      @cache.merge!(hash)
+      cache.merge!(hash)
     end
 
-    def memoize(method_name = nil, &block)
-      method_locals = caller_locals(block)
-      method_name ||= begin
-        method_locals.nil? ? caller_method : "#{caller_method}:#{method_locals}"
-      end
+    def memoize(as: nil, refresh: false, &block)
+      key = key(as || caller_method, caller_locals(block))
+      return cache[key] if !refresh && cache.key?(key)
 
-      return @cache[method_name] if @cache.key?(method_name)
-
-      @cache[method_name] = yield(block)
+      cache[key] = yield(block)
     end
 
     def present?
@@ -71,18 +64,18 @@ module ActiveMemoize
     alias_method :hits?, :present?
 
     def size
-      @cache.size
+      cache.size
     end
 
     def to_hash
-      @cache
+      cache
     end
 
     alias_method :as_json, :to_hash
     alias_method :hits, :to_hash
 
     def values
-      @cache.values
+      cache.values
     end
 
     private
@@ -90,10 +83,7 @@ module ActiveMemoize
     # rubocop:disable Metrics/LineLength
     def caller_locals(block)
       local_vars = block.binding.local_variables
-      local_vars = local_vars.flat_map { |name| [name, block.binding.local_variable_get(name)].join('=') }
-      return if local_vars.empty?
-
-      local_vars.join(',')
+      local_vars.flat_map { |name| [name, block.binding.local_variable_get(name)] }
     end
     # rubocop:enable Metrics/LineLength
 

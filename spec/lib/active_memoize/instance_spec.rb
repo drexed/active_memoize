@@ -6,11 +6,11 @@ require 'securerandom'
 class FooService
 
   def cache
-    @cache ||= ActiveMemoize::Cache.new
+    @cache ||= ActiveMemoize::Instance.new
   end
 
   def custom
-    cache.memoize('custom_name') do
+    cache.memoize(as: 'custom_name', refresh: true) do
       SecureRandom.hex(10)
     end
   end
@@ -29,16 +29,10 @@ class FooService
 
 end
 
-RSpec.describe ActiveMemoize::Cache do
-  subject { ActiveMemoize::Cache.new }
+RSpec.describe ActiveMemoize::Instance do
+  subject { ActiveMemoize::Instance.new }
 
   let(:service) { FooService.new }
-
-  describe '.initialize' do
-    it 'returns []' do
-      expect(subject.cache).to eq({})
-    end
-  end
 
   describe '.[]' do
     it 'returns nil' do
@@ -117,22 +111,11 @@ RSpec.describe ActiveMemoize::Cache do
       expect(old_random_string).to eq(new_random_string)
     end
 
-    it 'returns hash key with custom name' do
-      service.custom
+    it 'returns different strings' do
+      old_random_string = service.custom
+      new_random_string = service.custom
 
-      expect(service.cache.keys.first).to eq('custom_name')
-    end
-
-    it 'returns hash key without params' do
-      service.fixed
-
-      expect(service.cache.keys.first).to eq('fixed')
-    end
-
-    it 'returns hash key with params' do
-      service.random
-
-      expect(service.cache.keys.first).to eq('random:length=10')
+      expect(old_random_string).to_not eq(new_random_string)
     end
   end
 
