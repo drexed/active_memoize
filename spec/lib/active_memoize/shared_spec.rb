@@ -2,14 +2,14 @@
 
 require 'spec_helper'
 
-class FooService
-  extend ActiveMemoize::Klass
+class SharedFooService
+  extend ActiveMemoize::Shared
 end
 
-RSpec.describe ActiveMemoize::Klass do
-  subject { FooService.new }
+RSpec.describe ActiveMemoize::Shared do
+  subject { SharedFooService.new }
 
-  let(:service) { FooService }
+  let(:service) { SharedFooService }
 
   describe '.cache' do
     it 'returns {}' do

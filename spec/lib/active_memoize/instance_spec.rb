@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'securerandom'
 
-class FooService
+class InstanceFooService
 
   def cache
     @cache ||= ActiveMemoize::Instance.new
@@ -32,7 +32,7 @@ end
 RSpec.describe ActiveMemoize::Instance do
   subject { ActiveMemoize::Instance.new }
 
-  let(:service) { FooService.new }
+  let(:service) { InstanceFooService.new }
 
   describe '.[]' do
     it 'returns nil' do
@@ -112,10 +112,10 @@ RSpec.describe ActiveMemoize::Instance do
     end
 
     it 'returns different strings' do
-      old_random_string = service.custom
-      new_random_string = service.custom
+      old_custom_string = service.custom
+      new_custom_string = service.custom
 
-      expect(old_random_string).to_not eq(new_random_string)
+      expect(old_custom_string).to_not eq(new_custom_string)
     end
   end
 

@@ -3,10 +3,10 @@
 require 'spec_helper'
 require 'securerandom'
 
-class FooService
+class KlassFooService
   extend ActiveMemoize::Klass
 
-  def self.custom
+  def custom
     SecureRandom.hex(10)
   end
 
@@ -21,9 +21,9 @@ class FooService
 end
 
 RSpec.describe ActiveMemoize::Klass do
-  subject { FooService.new }
+  subject { KlassFooService.new }
 
-  let(:service) { FooService }
+  let(:service) { subject }
 
   describe '.memoize' do
     it 'returns same string twice' do
