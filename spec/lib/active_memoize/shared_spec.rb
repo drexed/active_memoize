@@ -18,7 +18,7 @@ RSpec.describe ActiveMemoize::Shared do
   end
 
   describe '.key' do
-    key = 'random:2384ba6a1157c108280c1e868d9d94a3'
+    key = 'random:dd7878149a8196d5b21abf3f51532dd46d79c471'
 
     it "returns '#{key}'" do
       expect(service.key('random', [1,{},[]])).to eq(key)

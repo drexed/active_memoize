@@ -10,8 +10,8 @@ module ActiveMemoize
     end
 
     def key(method_name, method_args)
-      method_md5 = Digest::MD5.hexdigest(method_args.to_s)
-      "#{method_name}:#{method_md5}"
+      method_sha1 = Digest::SHA1.hexdigest(method_args.to_s)
+      "#{method_name}:#{method_sha1}"
     end
 
   end
