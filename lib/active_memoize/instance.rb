@@ -80,12 +80,10 @@ module ActiveMemoize
 
     private
 
-    # rubocop:disable Metrics/LineLength
     def caller_locals(block)
       local_vars = block.binding.local_variables
       local_vars.flat_map { |name| [name, block.binding.local_variable_get(name)] }
     end
-    # rubocop:enable Metrics/LineLength
 
     def caller_method
       val = caller(2..2).first[CALLER_METHOD_REGEX, 1]

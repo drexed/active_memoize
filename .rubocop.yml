@@ -1,7 +1,8 @@
+require: rubocop-performance
 AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 2.6
   Exclude:
     - 'spec/**/**/*'
 Performance/RegexpMatch:
@@ -15,6 +16,8 @@ LineLength:
 Lint/RescueException:
   Enabled: false
 Metrics/ModuleLength:
+  Enabled: false
+Naming/UncommunicativeMethodParamName:
   Enabled: false
 Style/Alias:
   EnforcedStyle: prefer_alias_method
