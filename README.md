@@ -3,6 +3,8 @@
 [![Gem Version](https://badge.fury.io/rb/active_memoize.svg)](http://badge.fury.io/rb/active_memoize)
 [![Build Status](https://travis-ci.org/drexed/active_memoize.svg?branch=master)](https://travis-ci.org/drexed/active_memoize)
 
+**NOTE** ActiveMemoize has been deprecated in favor of [Lite::Memoize](https://github.com/drexed/lite-memoize). Its a drop-in replacement, so please make the switch as soon as possible.
+
 ActiveMemoize provides an API caching and memoizing local
 expensive calculations including those with parameters.
 
